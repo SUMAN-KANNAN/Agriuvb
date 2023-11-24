@@ -1,0 +1,67 @@
+<!--
+=========================================================
+ UVB system - v0.0.01
+=========================================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/png" href="/static/assets/img/bulb.png">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>
+    ハウス栽培におけるLEDによる光防除システムの実用化開発  | {% block title %}{% endblock %}  
+  </title>
+
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP|Material+Icons" rel="stylesheet">
+
+  <!-- CSS Files -->
+  <link href="/static/assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
+
+  <!-- Specific Page CSS goes HERE  -->
+  {% block stylesheets %}{% endblock stylesheets %}
+
+</head>
+
+<body>
+  <div {% if request.path != '/login/' and request.path != '/reset_password' %} class="wrapper" {% endif %} class="wrapper d-flex justify-content-center align-items-center" >
+    {% if request.path != '/login/' and request.path != '/reset_password' %}
+    {% include 'includes/sidebar.html' %}
+    {% endif %}
+    <div  {% if request.path != '/login/' and request.path != '/reset_password' %}class="main-panel"{% endif %} >
+
+      {% include 'includes/navigation.html' %}
+
+      <!-- End Navbar -->
+      <div class="content">
+        <div class="container-fluid">
+
+          {% block content %}{% endblock content %}
+
+        </div>
+      </div>
+      {% if request.path != '/login/' and request.path != '/reset_password' %}
+      {% include 'includes/footer.html' %}
+      {% endif %}
+    </div>
+  </div>
+
+  {% include 'includes/fixed-plugin.html' %}
+
+  {% include 'includes/scripts.html' %}
+
+  {% include 'includes/scripts-sidebar.html' %}
+  
+  <!-- Specific Page JS goes HERE  -->
+  {% block javascripts %}{% endblock javascripts %}
+  
+</body>
+
+</html>

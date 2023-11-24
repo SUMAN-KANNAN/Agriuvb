@@ -1,0 +1,143 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} ユーザ追加 {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+  .center-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .info-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+      text-align: center;
+  }
+
+  .loader {
+    border: 0px solid #f3f3f3;
+    border-top: 4px solid #00cae3;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+    margin-right: 10px;
+  }
+  .loader-d{
+    display: none;
+  }
+  @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+  }
+</style>
+{% endblock stylesheets %}{% block content %}
+<nav aria-label="breadcrumb" role="navigation">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/user_list">管理者</a></li>
+    {% if show == 'true' %}
+    <li class="breadcrumb-item" aria-current="page">編集</li>
+    {% else %}
+    <li class="breadcrumb-item active" aria-current="page">
+      追加
+    </li>
+    {% endif %}
+
+  </ol>
+</nav>
+<span class="loader-d" id="loader">
+<div class="info-loader" >
+  <div class="loader"></div>
+  <p class="text-success">メール送信中...</p>
+</div>
+</span>
+<div class="card">
+  <div class="card-body">
+    {% if error_message %}
+    <p class="text-danger text-center">{{ error_message }}</p>
+    {% endif %}
+    <form action="" method="post" id="myForm" autocomplete="off">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md-6 my-4">
+          <div class="form-group">
+            <label for="userName" class="bmd-label-floating">⽒名</label>
+            <input type="text" id="username" class="form-control" name="username">
+          </div>
+          <span class="text-danger" id="userNameMsg"></span>
+        </div>
+        <div class="col-md-6 my-4">
+          <div class="form-group">
+            {% if show == 'true' %}
+            <label for="email" class="bmd-label-floating">メール</label>
+            <input type="text"  class="form-control" name="email" value="{{ form.email.value }}" disabled>
+
+            {% else %}
+            <label for="email" class="bmd-label-floating">メール</label>
+            <input type="email" id="email" class="form-control" name="email">
+            {% endif %}
+          </div>
+          <span id="emailMsg" class="text-danger"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 my-4">
+          <div class="form-group">
+            <label for="権限" class="bmd-label-floating">権限</label>
+            <select name="role_id" class="form-control" id="roleId">
+              <option value="1">管理者</option>
+              <option value="2">ユーザ</option>
+          </select>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" class="form-control" name="mapped_under" value="{{ current_user_id }}">
+      <div class="center-container">
+        <a href="/user_list">
+          <button type="button" class="btn btn-Secondary mr-3">戻る</button></a>
+        {% if show == 'true' %}
+        <button type="submit" id="postBtn" class="btn btn-success">変更</button>
+        {% else %}
+        <button type="submit" id="addBtn" class="btn btn-success">追加</button>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock content %}
+{% block javascripts %}
+<script>
+    const loader = document.getElementById('loader');
+
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        // Your validation logic goes here
+
+        // Example validation:
+        var userInput = document.getElementById('username').value;
+        var emailInput = document.getElementById('email').value;
+
+        // Clear previous error messages
+        document.getElementById('userNameMsg').innerText = '';
+        document.getElementById('emailMsg').innerText = '';
+
+        if (userInput === '') {
+            document.getElementById('userNameMsg').innerText = '氏名を入力してください。';
+            event.preventDefault(); // Prevent form submission
+        }
+
+        if (emailInput === '') {
+            document.getElementById('emailMsg').innerText = 'メールを入力してください。';
+            event.preventDefault(); // Prevent form submission
+        }
+        else
+        loader.style.display = 'block';  // Show the loader when the button is clicked
+        // Additional validation logic can be added as needed
+    });
+
+</script>
+{% endblock javascripts %}
